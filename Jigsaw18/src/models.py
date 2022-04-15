@@ -73,3 +73,41 @@ def RobertaLargeModel(
     model = _initialize_hugginface_model(**config)
 
     return model
+
+
+def BertBaseModel(
+    input_shape=(256, 2),
+    pool_type='average',
+    n_classes=6,
+    activation=None
+):
+    config = {
+        'backbone_name': 'bert-base-cased',
+        'input_shape': input_shape,
+        'pool_type': pool_type,
+        'n_classes': n_classes,
+        'activation': activation
+    }
+
+    model = _initialize_hugginface_model(**config)
+
+    return model
+
+
+def BertLargeModel(
+    input_shape=(256, 2),
+    pool_type='average',
+    n_classes=6,
+    activation=None
+):
+    config = {
+        'backbone_name': 'bert-large-cased',
+        'input_shape': input_shape,
+        'pool_type': pool_type,
+        'n_classes': n_classes,
+        'activation': activation
+    }
+
+    model = _initialize_hugginface_model(**config)
+
+    return model
