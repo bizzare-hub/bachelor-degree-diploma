@@ -7,7 +7,7 @@ import tensorflow as tf
 
 class MyModelCheckpoint(tf.keras.callbacks.Callback):
     """
-    Use this if training with TPU
+    Custom checkpoint (saves full model in .h5 format)
     """
     def __init__(self, filepath, monitor='val_loss', save_best_only=True, pattern='model'):
         super(MyModelCheckpoint, self).__init__()

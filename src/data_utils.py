@@ -64,11 +64,16 @@ def get_folds(df, split_by='label', n_folds=5, shuffle=True):
 def encode_df(df: pd.DataFrame, tokenizer,
               col_name='text', max_length=128,
               drop=True):
+    """Supports both types of inputs: (paired and singular)"""
     input_ids_list, attn_mask_list = [], []
+    token_type_list = []  # actually used only for paired
 
     for idx, text in enumerate(df[col_name].values):
+        if isinstance(text, str):
+            text = [text]
+
         output = tokenizer.encode_plus(
-            text,
+            *text,
             truncation=True,
             add_special_tokens=True,
             max_length=max_length,
@@ -76,16 +81,21 @@ def encode_df(df: pd.DataFrame, tokenizer,
         )
 
         input_ids, attn_mask = output['input_ids'], output['attention_mask']
+        token_type = output['token_type_ids']
 
         input_ids_list.append(input_ids)
         attn_mask_list.append(attn_mask)
+        token_type_list.append(token_type)
 
     n_cols = df.shape[1]
 
     df.insert(n_cols, 'input_ids', input_ids_list)
     df.insert(n_cols + 1, 'attention_mask', attn_mask_list)
+    df.insert(n_cols + 2, 'token_type_ids', token_type_list)
 
     if drop:
         df.drop(col_name, 1, inplace=True)
 
     return df
+
+
